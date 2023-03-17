@@ -1,6 +1,31 @@
 const { Kafka } = require('kafkajs');
 const argv = require('yargs').argv;
 
+
+const deleteTopic = (topicName) => {
+
+  const admin = kafka.admin();
+
+  admin.connect().then(()=>{
+
+    return admin.deleteTopics({
+      topics: [topicName],
+      timeout: 5000
+    });
+
+  }).then(()=>{
+    console.log('Excluido com sucesso!');
+  })
+  .catch((err)=>{
+    console.log('Err ao tentar excluir topic!');
+  })
+  .finally(()=>{
+    admin.disconnect();
+  });
+} 
+
+
+
 const topic = argv.TOPIC_NAME || "teste";
 
 const kafka = new Kafka({
